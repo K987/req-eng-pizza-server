@@ -1,0 +1,157 @@
+{
+	"info": {
+		"_postman_id": "cdd08886-fb3e-42ed-b7dd-a8730225d0ce",
+		"name": "req_eng_pizza",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:8080/v1/carts",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/carts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"carts"
+					]
+				},
+				"description": "create cart"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/v1/items",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/items",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"items"
+					]
+				},
+				"description": "get items"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/v1/carts/{cartId}",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/carts/cart-CbQ5mZLXO5",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"carts",
+						"cart-CbQ5mZLXO5"
+					]
+				},
+				"description": "clear cart"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/v1/carts/{cartId}/checkout",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/carts/cart-CbQ5mZLXO5/checkout",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"carts",
+						"cart-CbQ5mZLXO5",
+						"checkout"
+					]
+				},
+				"description": "checkout cart"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/v1/carts/{cartId}/changeOrderQty",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n  {\n    \"itemId\": \"pizza-2\",\n    \"qty\": 1\n  }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/v1/carts/cart-mx15BHOaJn/changeOrderQty",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"carts",
+						"cart-mx15BHOaJn",
+						"changeOrderQty"
+					]
+				},
+				"description": "change items in cart"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:8080/v1/offers/{offerId}",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/v1/offers/offer-fG0mbWzoC0",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"v1",
+						"offers",
+						"offer-fG0mbWzoC0"
+					]
+				},
+				"description": "accept offer"
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
