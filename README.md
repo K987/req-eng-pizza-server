@@ -19,6 +19,9 @@ http://localhost:8080/v1/items
 
 Change default port value in application.properties
 
+# Test
+ https://github.com/K987/req-eng-pizza-server 
+ import docs/req_eng_pizza.postman_collection.json
 
 # Swagger generated server
 
