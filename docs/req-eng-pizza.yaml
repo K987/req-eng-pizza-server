@@ -1,0 +1,290 @@
+swagger: '2.0'
+info:
+  description: 'Pizza Order interface def'
+  version: '1.0.0'
+  title: 'Pizza Order'
+host: 'localhost:8080'
+basePath: '/v1'
+schemes:
+  - 'http'
+paths:
+  /items:
+    get:
+      tags:
+        - 'item'
+      summary: 'Retrieves the orderable items list'
+      operationId: 'getItems'
+      produces:
+        - 'application/json'
+      responses:
+        '200':
+          description: 'List of orderable items'
+          schema:
+            $ref: '#/definitions/GetItemsResponse'
+        '500':
+          description: 'Internal server error'
+  /carts:
+    put:
+      tags:
+        - 'cart'
+      summary: 'Creates a new cart for ordering'
+      operationId: 'createNewCart'
+      produces:
+        - 'application/json'
+      responses:
+        '201':
+          description: 'Id of the new cart'
+          schema:
+            $ref: '#/definitions/CreateCartResponse'
+        '500':
+          description: 'Internal server error'
+  /carts/{cartId}/changeOrderQty:
+    post:
+      tags:
+        - 'cart'
+      summary: 'Update item quantity in the order'
+      description: 'Updates the specified items in the cart to a non-negative qty'
+      operationId: 'changeOrderQty'
+      produces:
+        - 'application/json'
+      parameters:
+        - in: path
+          required: true
+          name: 'cartId'
+          type: string
+          description: 'The id of the cart'
+        - in: body
+          name: 'itemsToChange'
+          required: true
+          schema:
+            type: array
+            items:
+              $ref: '#/definitions/ChangeOrderQtyRequest'
+      responses:
+        '200':
+          description: 'Cart update success'
+          schema:
+            $ref: '#/definitions/ChangeOrderQtySuccessResponse'
+        '400':
+          description: 'Cart update failed'
+          schema:
+            $ref: '#/definitions/ChangeOrderQtyFailureResponse'
+        '500':
+          description: 'Internal server error'
+  /carts/{cartId}/checkout:
+    get:
+      tags:
+        - 'cart'
+      summary: 'Proceed to payment'
+      description: 'Finalize order and go to checkout'
+      operationId: 'checkout'
+      parameters:
+        - in: path
+          required: true
+          name: 'cartId'
+          type: string
+          description: 'The id of the cart'
+      responses:
+        '300':
+          description: 'Checkout successful'
+          schema:
+            $ref: '#/definitions/CheckoutSuccessResponse'
+        '400':
+          description: 'Checkout failure'
+          schema:
+            $ref: '#/definitions/CheckoutFailureResponse'
+        '500':
+          description: 'Internal server error'
+  /carts/{cartId}:
+    delete:
+      tags:
+        - 'cart'
+      summary: 'Cancels order and reinitialize cart'
+      operationId: 'clearCart'
+      parameters:
+        - in: path
+          required: true
+          name: 'cartId'
+          type: string
+          description: 'The id of the cart'
+      responses:
+        '204':
+          description: 'Delete successful'
+        '500':
+          description: 'Internal server error'
+  /offers/{offerId}:
+    post:
+      tags:
+        - 'offer'
+      summary: 'Choose an offer'
+      operationId: 'chooseOffer'
+      parameters:
+        - in: path
+          required: true
+          name: 'offerId'
+          type: string
+          description: 'The id of the offer'
+        - in: body
+          name: 'itemToChoose'
+          required: true
+          schema:
+            $ref: '#/definitions/ChooseOfferRequest'
+      responses:
+        '200':
+          description: 'Offer selected successfully'
+          schema:
+            $ref: '#/definitions/ChooseOfferSuccessResponse'
+        '404':
+          description: 'Offer not exists'
+          schema:
+            $ref: '#/definitions/ChooseOfferFailureResponse'
+        '410':
+          description: 'Offer selected already'
+          schema:
+            $ref: '#/definitions/ChooseOfferFailureResponse'
+        '500':
+          description: 'Internal server error'
+definitions:
+  GetItemsResponse:
+    type: array
+    items:
+      $ref: '#/definitions/Item'
+  CreateCartResponse:
+    type: object
+    required:
+      - 'id'
+    properties:
+      id:
+        type: string
+        example: 'cart-987'
+  ChangeOrderQtyRequest:
+    type: object
+    required:
+      - 'itemId'
+      - 'qty'
+    properties:
+      itemId:
+        type: string
+        example: 'item-123'
+      qty:
+        type: 'integer'
+        minimum: 0
+        example: 1
+  ChangeOrderQtySuccessResponse:
+    type: object
+    required:
+      - cart
+    properties:
+      cart:
+        $ref: '#/definitions/Cart'
+      offer:
+        $ref: '#/definitions/Offer'
+  ChangeOrderQtyFailureResponse:
+    type: object
+    required:
+      - error
+    properties:
+      cart:
+        $ref: '#/definitions/Cart'
+      error:
+        $ref: '#/definitions/Error'
+  CheckoutSuccessResponse:
+    type: object
+    required:
+      - redirectUrl
+    properties:
+      cart:
+        $ref: '#/definitions/Cart'
+      redirectUrl:
+        type: string
+        example: 'https://redirect.to/cart-987/pay'
+  CheckoutFailureResponse:
+    type: object
+    required:
+      - error
+    properties:
+      cart:
+        $ref: '#/definitions/Cart'
+      error:
+        $ref: '#/definitions/Error'
+  ChooseOfferRequest:
+    type: object
+    required:
+      - itemId
+    properties:
+      itemId:
+        type: string
+  ChooseOfferSuccessResponse:
+    type: object
+    properties:
+      cart:
+        $ref: '#/definitions/Cart'
+  ChooseOfferFailureResponse:
+    type: object
+    properties:
+      error:
+        $ref: '#/definitions/Error'
+  Error:
+    type: object
+    required:
+      - code
+      - message
+    properties:
+      code:
+        type: integer
+      message:
+        type: string
+  Item:
+    type: object
+    required:
+      - id
+      - name
+      - type
+      - price
+    properties:
+      id:
+        type: string
+        example: 'item-453'
+      type:
+        type: string
+        enum: [FOOD, BEVERAGE]
+        example: 'FOOD'
+      name:
+        type: string
+        example: 'Margherita'
+      price:
+        type: number
+        minimum: 0
+        exclusiveMinimum: true
+        example: 3
+  Cart:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: string
+        example: 'cart-987'
+      total:
+        type: number
+        example: 3
+      remainingToCheckOut:
+        type: number
+        example: 7
+      items:
+        type: array
+        items:
+          $ref: '#/definitions/Item'
+  Offer:
+    type: object
+    required:
+      - id
+      - offerings
+    properties:
+      id:
+        type: string
+        example: 'offer-543'
+      offerings:
+        type: array
+        items:
+          $ref: '#/definitions/Item'
