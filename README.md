@@ -1,3 +1,25 @@
+# Start
+
+Start your server as an simple java application  
+
+to build:
+mvn clean install
+
+to start:
+java -jar dist/pizza-server-1.0.0.jar
+
+You can view the api documentation in swagger-ui by pointing to  
+http://localhost:8080/api-docs
+
+Service root available at:
+http://localhost:8080/v1
+
+e.g:
+http://localhost:8080/v1/items
+
+Change default port value in application.properties
+
+
 # Swagger generated server
 
 Spring Boot Server 
@@ -10,21 +32,3 @@ This is an example of building a swagger-enabled server in Java using the Spring
 
 The underlying library integrating swagger to SpringBoot is [springfox](https://github.com/springfox/springfox)  
 
-Start your server as an simple java application  
-
-build:
-mvn clean install
-
-start:
-java -jar dist/pizza-server-1.0.0.jar
-
-You can view the api documentation in swagger-ui by pointing to  
-http://localhost:8080/api-docs
-
-Service available at:
-http://localhost:8080/v1
-
-e.g:
-http://localhost:8080/v1/items
-
-Change default port value in application.properties
